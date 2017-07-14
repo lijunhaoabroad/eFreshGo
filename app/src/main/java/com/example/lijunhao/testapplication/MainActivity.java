@@ -12,27 +12,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button b1=(Button) findViewById(R.id.btnLogin);
-        Button b2=(Button) findViewById(R.id.btnRegister);
-
-        b1.setOnClickListener(new View.OnClickListener() {
+        Thread thread=new Thread(){
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-
+            public void run(){
+                try{
+                    sleep(3000);
+                    Intent intent=new Intent(getApplicationContext(),IndexActivity.class);
+                    startActivity(intent);
+                    finish();
+            }catch (InterruptedException e){
+                    e.printStackTrace();
             }
-
-        });
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(intent);
-
             }
+        };
+        thread.start();
 
-        });
+//        Button b1=(Button) findViewById(R.id.btnLogin);
+//        Button b2=(Button) findViewById(R.id.btnRegister);
+
+//        b1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//
+//            }
+//
+//        });
+//        b2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+//                startActivity(intent);
+//
+//            }
+//
+//        });
     }
 }
