@@ -12,9 +12,12 @@ package com.example.lijunhao.testapplication;
         import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
-        import android.widget.Toast;
-        import com.example.lijunhao.testapplication.R;
-        import com.example.lijunhao.testapplication.DataProduct;
+        import com.example.lijunhao.testapplication.Product;
+        import com.squareup.picasso.Picasso;
+
+        import java.io.InputStream;
+        import java.net.URL;
+        import java.net.URLConnection;
         import java.util.ArrayList;
 /**
  * Created by Oclemy on 6/21/2016 for ProgrammingWizards Channel and http://www.camposha.com.
@@ -23,18 +26,18 @@ package com.example.lijunhao.testapplication;
  */
 public class CustomAdapter extends BaseAdapter{
     Context c;
-    ArrayList<DataProduct> products;
-    public CustomAdapter(Context c, ArrayList<DataProduct> products) {
+    ArrayList<Product> Products;
+    public CustomAdapter(Context c, ArrayList<Product> Products) {
         this.c = c;
-        this.products = products;
+        this.Products = Products;
     }
     @Override
     public int getCount() {
-        return products.size();
+        return Products.size();
     }
     @Override
     public Object getItem(int position) {
-        return products.get(position);
+        return Products.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -51,12 +54,20 @@ public class CustomAdapter extends BaseAdapter{
         TextView descTxt= (TextView) convertView.findViewById(R.id.descTxt);
         ImageView img=(ImageView) convertView.findViewById(R.id.img);
         Button btnCart=(Button) convertView.findViewById(R.id.btnCart);
-        final DataProduct s= (DataProduct) this.getItem(position);
+        final Product s= (Product) this.getItem(position);
         nameTxt.setText(s.getpName());
         propTxt.setText(s.getpPrice());
         descTxt.setText(s.getpDesc());
-        img.setImageBitmap( BitmapFactory.decodeFile(s.getpImage()));
-
+        Picasso.with(c).load(s.getpImage()).into(img);
+//
+//      try{
+//            InputStream in = new java.net.URL(s.getpImage()).openStream();
+//
+//            img.setImageBitmap(BitmapFactory.decodeStream(in));
+//        }catch (Exception e){
+//            e.printStackTrace();
+//       }
+////
 //        //ONITECLICK
 //        convertView.setOnClickListener(new View.OnClickListener() {
 //            @Override

@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.example.lijunhao.testapplication.FirebaseHelper;
 import com.example.lijunhao.testapplication.CustomAdapter;
 
+import java.util.ArrayList;
+
 
 public class IndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,17 +36,15 @@ public class IndexActivity extends AppCompatActivity
     FirebaseHelper helper;
     CustomAdapter adapter;
     ListView lv;
+    ArrayList<Product> Products =new ArrayList<>();
+//    DataSnapshot dataSnapshot;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
-        db = FirebaseDatabase.getInstance().getReference();
-        helper=new FirebaseHelper(db);
-        adapter=new CustomAdapter(this,helper.retrieve());
-        lv=(ListView) findViewById(R.id.productList);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -53,8 +54,52 @@ public class IndexActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        lv=(ListView) findViewById(R.id.productList);
+        db = FirebaseDatabase.getInstance().getReference();
+
+       db.addChildEventListener(new ChildEventListener() {
+           @Override
+           public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+               fetchData(dataSnapshot);
+               adapter = new CustomAdapter(getBaseContext(),Products);
+               lv.setAdapter(adapter);
+           }
+
+           @Override
+           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+               fetchData(dataSnapshot);
+               adapter = new CustomAdapter(getApplicationContext(),Products);
+               lv.setAdapter(adapter);
+           }
+
+           @Override
+           public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+           }
+
+           @Override
+           public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+
+           }
+       });
 
 
+      // adapter.notifyDataSetChanged();
+
+    }
+    private void fetchData(DataSnapshot dataSnapshot)
+    {
+        Products.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
+            Product pp =ds.getValue(Product.class);
+            Products.add(pp);
+        }
     }
 
     @Override
@@ -101,7 +146,7 @@ public class IndexActivity extends AppCompatActivity
             startActivity(i);
          // fragmentManager.beginTransaction().replace(R.id.content_frame,new FirstFragment()).commit();
         } else if (id == R.id.nav_second_layout) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new SecondFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame,new FirstFragment()).commit();
 
         } else if (id == R.id.nav_third_layout) {
             fragmentManager.beginTransaction().replace(R.id.content_frame,new ThirdFragment()).commit();

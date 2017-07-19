@@ -1,17 +1,20 @@
 package com.example.lijunhao.testapplication;
 
+import java.util.ArrayList;
+
 /**
  * Created by win8 on 2017-07-18.
  */
 
-public class DataProduct {
+public class Product {
 //    private String pCategory;
     private String pName;
     private String pDesc;
 //    private String pDiscount;
     private String pImage;
     private String pPrice;
-    public DataProduct(){
+
+    public Product(){
 
     }
 //    public String getpCategory(){

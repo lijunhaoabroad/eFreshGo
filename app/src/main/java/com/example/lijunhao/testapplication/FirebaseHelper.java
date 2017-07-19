@@ -1,13 +1,14 @@
 package com.example.lijunhao.testapplication;
-        import android.provider.ContactsContract;
 
-        import com.google.firebase.database.ChildEventListener;
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
-        import com.google.firebase.database.DatabaseException;
-        import com.google.firebase.database.DatabaseReference;
-        import com.example.lijunhao.testapplication.DataProduct;
-        import java.util.ArrayList;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.example.lijunhao.testapplication.Product;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 /**
  * Created by Oclemy on 6/21/2016 for ProgrammingWizards Channel and http://www.camposha.com.
  * 1.SAVE DATA TO FIREBASE
@@ -17,7 +18,7 @@ package com.example.lijunhao.testapplication;
 public class FirebaseHelper {
     DatabaseReference db;
     Boolean saved;
-    ArrayList<DataProduct> products=new ArrayList<>();
+    ArrayList<Product> Products =new ArrayList<>();
     /*
  PASS DATABASE REFRENCE
   */
@@ -25,16 +26,16 @@ public class FirebaseHelper {
         this.db = db;
     }
 //    //WRITE IF NOT NULL
-//    public Boolean save(DataProduct products)
+//    public Boolean save(Product Products)
 //    {
-//        if(products==null)
+//        if(Products==null)
 //        {
 //            saved=false;
 //        }else
 //        {
 //            try
 //            {
-//                db.child("Spacecraft").push().setValue(products);
+//                db.child("Spacecraft").push().setValue(Products);
 //                saved=true;
 //            }catch (DatabaseException e)
 //            {
@@ -47,35 +48,29 @@ public class FirebaseHelper {
     //IMPLEMENT FETCH DATA AND FILL ARRAYLIST
     private void fetchData(DataSnapshot dataSnapshot)
     {
-        products.clear();
+        Products.clear();
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
-            DataProduct product=ds.getValue(DataProduct.class);
-            products.add(product);
+            Product pp =ds.getValue(Product.class);
+            Products.add(pp);
         }
     }
     //RETRIEVE
-    public ArrayList<DataProduct> retrieve()
+
+    public ArrayList<Product> retrieve()
     {
-        db.addChildEventListener(new ChildEventListener() {
+
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              fetchData(dataSnapshot);
             }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                fetchData(dataSnapshot);
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
         });
-        return products;
+        return Products;
     }
 }
