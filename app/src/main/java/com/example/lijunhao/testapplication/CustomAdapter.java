@@ -31,26 +31,13 @@ public class CustomAdapter extends BaseAdapter{
     Context c;
     ArrayList<Product> Products;
     int number=0;
+    LayoutInflater inflater;
 
     public CustomAdapter(Context c, ArrayList<Product> Products) {
         this.c = c;
         this.Products = Products;
     }
-     static class ViewHolder {
-        ImageView img;
-        TextView nameTxt,propTxt,descTxt,Qty;
-        Button btnCart,btnAdd,btnReduce;
-//        ViewHolder(View v) {
-//            TextView nameTxt= (TextView) v.findViewById(R.id.nameTxt);
-//            TextView propTxt= (TextView) v.findViewById(R.id.price);
-//            TextView descTxt= (TextView) v.findViewById(R.id.descTxt);
-//            ImageView img=(ImageView) v.findViewById(R.id.img);
-//            TextView Qty=(TextView) v.findViewById(R.id.Qty);
-//          Button btnCart=(Button) v.findViewById(R.id.btnCart);
-//             Button btnAdd=(Button) v.findViewById(R.id.btnAddQty);
-//           Button btnReduce=(Button) v.findViewById(R.id.btnReduce);
-    //}
-    }
+
     @Override
     public int getCount() {
         return Products.size();
@@ -65,24 +52,14 @@ public class CustomAdapter extends BaseAdapter{
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-     //   ViewHolder holder;
+        if(inflater==null)
+        {
+            inflater= (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
         if(convertView==null)
        {
-           convertView= LayoutInflater.from(c).inflate(R.layout.list_item,parent,false);}
-//          holder =new ViewHolder();
-//           holder.nameTxt=(TextView)convertView.findViewById(R.id.nameTxt);
-//           holder.propTxt=(TextView)convertView.findViewById(R.id.price);
-//           holder.descTxt=(TextView)convertView.findViewById(R.id.descTxt);
-//           holder.img=(ImageView)convertView.findViewById(R.id.img);
-//           holder.Qty=(TextView) convertView.findViewById(R.id.Qty);
-//           holder.btnCart=(Button) convertView.findViewById(R.id.btnCart);
-//           holder.btnAdd=(Button) convertView.findViewById(R.id.btnAddQty);
-////           holder.btnReduce=(Button) convertView.findViewById(R.id.btnReduce);
-//           convertView.setTag(holder);
-//       }else{
-//            holder=(ViewHolder) convertView.getTag();
-//        }
-         //holder=convertView.getTag();
+           convertView= LayoutInflater.from(c).inflate(R.layout.list_item,parent,false);
+       }
            TextView nameTxt= (TextView) convertView.findViewById(R.id.nameTxt);
            TextView propTxt= (TextView) convertView.findViewById(R.id.price);
            TextView descTxt= (TextView) convertView.findViewById(R.id.descTxt);
@@ -128,21 +105,7 @@ public class CustomAdapter extends BaseAdapter{
            });
 
 
-//      try{
-//            InputStream in = new java.net.URL(s.getpImage()).openStream();
-//
-//            img.setImageBitmap(BitmapFactory.decodeStream(in));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//       }
-////
-//        //ONITECLICK
-//        convertView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(c,s.getpName(),Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
         return convertView;
     }
 }

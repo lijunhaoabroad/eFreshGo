@@ -25,27 +25,7 @@ public class FirebaseHelper {
     public FirebaseHelper(DatabaseReference db) {
         this.db = db;
     }
-//    //WRITE IF NOT NULL
-//    public Boolean save(Product Products)
-//    {
-//        if(Products==null)
-//        {
-//            saved=false;
-//        }else
-//        {
-//            try
-//            {
-//                db.child("Spacecraft").push().setValue(Products);
-//                saved=true;
-//            }catch (DatabaseException e)
-//            {
-//                e.printStackTrace();
-//                saved=false;
-//            }
-//        }
-//        return saved;
-//    }
-    //IMPLEMENT FETCH DATA AND FILL ARRAYLIST
+
     private void fetchData(DataSnapshot dataSnapshot)
     {
         Products.clear();

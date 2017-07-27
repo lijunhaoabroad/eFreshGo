@@ -13,13 +13,14 @@ public class Product {
 //    private String pDiscount;
     private String pImage;
     private String pPrice;
+    private String pCategory;
 
     public Product(){
 
     }
-//    public String getpCategory(){
-//        return pCategory;
-//    }
+    public String getpCategory(){
+        return pCategory;
+    }
     public String getpName(){
         return pName;
     }
@@ -36,7 +37,7 @@ public class Product {
         return pPrice;
     }
 
-//    public void setpCategory(String category){this.pCategory=category;}
+    public void setpCategory(String category){this.pCategory=category;}
     public void setpName(String name){this.pName=name;}
     public void setpDesc(String desc){this.pDesc=desc;}
 //    public void setpDiscount(String discount){this.pDiscount=discount;}

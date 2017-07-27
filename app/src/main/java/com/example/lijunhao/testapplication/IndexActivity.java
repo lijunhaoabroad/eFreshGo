@@ -3,9 +3,14 @@ package com.example.lijunhao.testapplication;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.view.MenuInflater;
 import android.view.View;
+import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +19,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -32,75 +39,33 @@ import java.util.ArrayList;
 
 public class IndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    DatabaseReference db;
-    FirebaseHelper helper;
-    CustomAdapter adapter;
-    ListView lv;
-    ArrayList<Product> Products =new ArrayList<>();
-//    DataSnapshot dataSnapshot;
 
-
+    android.support.v4.app.FragmentManager FM;
+    FragmentTransaction FT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
+
+        FM= getSupportFragmentManager();
+        FT= FM.beginTransaction();
+        FT.replace(R.id.containerView, new TabFragment()).commit();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        lv=(ListView) findViewById(R.id.productList);
-        db = FirebaseDatabase.getInstance().getReference();
 
-       db.addChildEventListener(new ChildEventListener() {
-           @Override
-           public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               fetchData(dataSnapshot);
-               adapter = new CustomAdapter(getBaseContext(),Products);
-               lv.setAdapter(adapter);
-           }
-
-           @Override
-           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-               fetchData(dataSnapshot);
-               adapter = new CustomAdapter(getApplicationContext(),Products);
-               lv.setAdapter(adapter);
-           }
-
-           @Override
-           public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-           }
-
-           @Override
-           public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-
-           }
-       });
-
-
-      // adapter.notifyDataSetChanged();
 
     }
-    private void fetchData(DataSnapshot dataSnapshot)
-    {
-        Products.clear();
-        for (DataSnapshot ds : dataSnapshot.getChildren())
-        {
-            Product pp =ds.getValue(Product.class);
-            Products.add(pp);
-        }
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -111,7 +76,28 @@ public class IndexActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    FragmentTransaction fragmentTransaction= FM.beginTransaction();
+                    fragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
+                    return true;
+                case R.id.navigation_dashboard:
+                    FragmentTransaction fragmentTransaction2= FM.beginTransaction();
+                    fragmentTransaction2.replace(R.id.containerView, new MeatFragment()).commit();
+                    return true;
+                case R.id.navigation_notifications:
+
+                    return true;
+            }
+            return false;
+        }
+
+    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,6 +114,18 @@ public class IndexActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+          setContentView(R.layout.second_layout);
+            Button button=(Button)findViewById(R.id.btnReturn);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    onCreate(new Bundle());
+
+
+                }
+            });
             return true;
         }
 
@@ -139,17 +137,18 @@ public class IndexActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragmentManager fragmentManager=getFragmentManager();
+
 
         if (id == R.id.nav_first_layout) {
             Intent i=new Intent(this,Main2Activity.class);
             startActivity(i);
-         // fragmentManager.beginTransaction().replace(R.id.content_frame,new FirstFragment()).commit();
+
         } else if (id == R.id.nav_second_layout) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new FirstFragment()).commit();
+            FragmentTransaction fragmentTransaction= FM.beginTransaction();
+            fragmentTransaction.replace(R.id.containerView, new MeatFragment()).commit();
 
         } else if (id == R.id.nav_third_layout) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new ThirdFragment()).commit();
+          //  fragmentManager.beginTransaction().replace(R.id.content_frame,new MeatFragment()).commit();
 
         } else if (id == R.id.nav_share) {
 

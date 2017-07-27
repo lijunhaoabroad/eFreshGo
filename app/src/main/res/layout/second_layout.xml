@@ -11,4 +11,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="153dp"
         android:text="Your Orders" />
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Button" />
 </RelativeLayout>
